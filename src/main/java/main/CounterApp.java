@@ -13,13 +13,14 @@ public class CounterApp {
 
     private CounterApp() {}
     public static String generateOutput(CounterAppArgs counterAppArgs) throws IOException {
-        String output = "";
         File inputFile = counterAppArgs.getInputFile();
+        String output = "";
         Counter counter;
 
         if (inputFile == null) {
             counter = new FromInputStreamCounter(System.in);
         } else {
+            output += inputFile.getName() + "\n\n";
             counter = new FromFileCounter(inputFile);
         }
 

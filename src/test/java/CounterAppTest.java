@@ -18,7 +18,7 @@ class CounterAppTest {
 
         String output = CounterApp.generateOutput(inputFileAndLineOption);
 
-        assertEquals("LINES: 7145\n", output);
+        assertEquals("theArtOfWar.txt\n\nLINES: 7145\n", output);
     }
 
     @Test
@@ -30,7 +30,7 @@ class CounterAppTest {
 
         String output = CounterApp.generateOutput(inputFileAndAllOptions);
 
-        assertEquals("\nBYTES: 342190\nLINES: 7145\nWORDS: 58164\nCHARS: 339292\n", output);
+        assertEquals("theArtOfWar.txt\n\n\nBYTES: 342190\nLINES: 7145\nWORDS: 58164\nCHARS: 339292\n", output);
     }
 
     @Test
@@ -42,7 +42,7 @@ class CounterAppTest {
 
         String output = CounterApp.generateOutput(inputFileAndNoOption);
 
-        assertEquals("", output);
+        assertEquals("emptyTest.txt\n\n", output);
     }
 
     @Test
