@@ -12,7 +12,6 @@ If no option is provided then it outputs them all.
 ## Differences from `wc`:
 
 - The output is explicit about what each output line is e.g. `BYTES: 342190` etc.
-- `lcwc` doesn't output the filename.
 - The default option when no args except the input file are provided is to provide *all* information.
 - `lcwc` doesn't bother telling you when you've entered an illegal argument
 
