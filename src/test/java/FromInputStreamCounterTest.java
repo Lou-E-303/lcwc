@@ -59,6 +59,15 @@ class FromInputStreamCounterTest {
     }
 
     @Test
+    void ifInputContainsMultiByteCharactersThenReturnCorrectByteCount() throws IOException {
+        setInput("ÀÁÂÃ");
+
+        long byteCount = counter.count(CountingStrategy.BYTES);
+
+        assertEquals(8, byteCount);
+    }
+
+    @Test
     void ifInputContainsMultiByteCharactersThenReturnCorrectCharacterCount() throws IOException {
         setInput("ÀÁÂÃ");
 

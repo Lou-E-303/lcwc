@@ -61,6 +61,16 @@ class FromFileCounterTest {
     }
 
     @Test
+    void ifTextFileContainsMultiByteCharactersThenReturnCorrectByteCount() {
+        File file = new File("src/test/resources/multiByte.txt");
+        FromFileCounter counter = new FromFileCounter(file);
+
+        long byteCount = counter.count(CountingStrategy.BYTES);
+
+        assertEquals(8, byteCount);
+    }
+
+    @Test
     void ifTextFileContainsMultiByteCharactersThenReturnCorrectCharacterCount() {
         File file = new File("src/test/resources/multiByte.txt");
         FromFileCounter counter = new FromFileCounter(file);
