@@ -22,41 +22,74 @@ public class FromInputStreamCounter implements Counter {
     public long count(CountingStrategy countingStrategy) throws IOException {
         long count = 0;
 
-        if (countingStrategy == CountingStrategy.BYTES) {
-            while (inputStream.read() != -1) {
-                count++;
-            }
-            inputStream.reset();
+        switch(countingStrategy) {
+            case BYTES:
+                count = countBytes();
+                break;
+            case LINES:
+                count = countLines();
+                break;
+            case WORDS:
+                count = countWords();
+                break;
+            case CHARS:
+                count = countChars();
+                break;
         }
 
-        if (countingStrategy == CountingStrategy.LINES) {
-            Scanner scanner = new Scanner(inputStream);
-            while (scanner.hasNextLine()) {
-                scanner.nextLine();
-                count++;
-            }
-            inputStream.reset();
-        }
+        inputStream.reset();
+        return count;
+    }
 
-        if (countingStrategy == CountingStrategy.WORDS) {
-            Scanner scanner = new Scanner(inputStream);
-            while (scanner.hasNextLine()) {
-                String line = scanner.nextLine();
-                List<String> wordsInLine = new ArrayList<>(Arrays.asList(line.split("[ \\r\\n\\f\\t\\v]")));
-                wordsInLine.removeAll(List.of(""));
-                count += wordsInLine.size();
-            }
-            inputStream.reset();
-        }
+    private long countBytes() {
+        long count = 0;
 
-        if (countingStrategy == CountingStrategy.CHARS) {
-            try (InputStreamReader reader = new InputStreamReader(inputStream)) {
-                while ((reader.read()) != -1) {
-                    count++;
-                }
+        while (true) {
+            try {
+                if (inputStream.read() == -1) break;
             } catch (IOException e) {
                 e.printStackTrace();
             }
+            count++;
+        }
+        return count;
+    }
+
+    private long countLines() {
+        long count = 0;
+        Scanner scanner = new Scanner(inputStream);
+
+        while (scanner.hasNextLine()) {
+            scanner.nextLine();
+            count++;
+        }
+
+        return count;
+    }
+
+    private long countWords() {
+        long count = 0;
+        Scanner scanner = new Scanner(inputStream);
+
+        while (scanner.hasNextLine()) {
+            String line = scanner.nextLine();
+            List<String> wordsInLine = new ArrayList<>(Arrays.asList(line.split("[ \\r\\n\\f\\t\\v]")));
+            wordsInLine.removeAll(List.of(""));
+            count += wordsInLine.size();
+        }
+
+        return count;
+    }
+
+    private long countChars() {
+        long count = 0;
+
+        try (InputStreamReader reader = new InputStreamReader(inputStream)) {
+            while ((reader.read()) != -1) {
+                count++;
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
 
         return count;

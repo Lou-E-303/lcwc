@@ -20,35 +20,63 @@ public class FromFileCounter implements Counter {
     public long count(CountingStrategy countingStrategy) {
         long count = 0;
 
-        if (countingStrategy.equals(CountingStrategy.BYTES)) {
-            return inputFile.length();
-        }
-
         try (BufferedReader reader = new BufferedReader(new FileReader(inputFile))) {
-
-            if (countingStrategy.equals(CountingStrategy.CHARS)) {
-                while ((reader.read()) > 0)
-                {
-                    count++;
-                }
-                return count;
-            }
-
-            String line;
-
-            while ((line = reader.readLine()) != null) {
-                if (countingStrategy.equals(CountingStrategy.LINES)) {
-                    count++;
-                } else if (countingStrategy.equals(CountingStrategy.WORDS)) {
-                    List<String> wordsInLine = new ArrayList<>(Arrays.asList(line.split("[ \\r\\n\\f\\t\\v]")));
-                    wordsInLine.removeAll(List.of(""));
-                    count += wordsInLine.size();
-                }
+            switch(countingStrategy) {
+                case BYTES:
+                    count = countBytes();
+                    break;
+                case LINES:
+                    count = countLines(reader);
+                    break;
+                case WORDS:
+                    count = countWords(reader);
+                    break;
+                case CHARS:
+                    count = countChars(reader);
+                    break;
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
 
+        return count;
+    }
+
+    private long countBytes() {
+        return inputFile.length();
+    }
+
+    private long countLines(BufferedReader reader) throws IOException {
+        long count = 0;
+
+        while ((reader.readLine()) != null) {
+            count++;
+        }
+
+        return count;
+    }
+
+    private long countWords(BufferedReader reader) throws IOException {
+        long count = 0;
+
+        String line;
+
+        while ((line = reader.readLine()) != null) {
+            List<String> wordsInLine = new ArrayList<>(Arrays.asList(line.split("[ \\r\\n\\f\\t\\v]")));
+            wordsInLine.removeAll(List.of(""));
+            count += wordsInLine.size();
+        }
+
+        return count;
+    }
+
+    private long countChars(BufferedReader reader) throws IOException {
+        long count = 0;
+
+        while ((reader.read()) > 0)
+        {
+            count++;
+        }
         return count;
     }
 }
