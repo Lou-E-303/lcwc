@@ -18,7 +18,7 @@ class CounterAppTest {
 
         String output = CounterApp.generateOutput(inputFileAndLineOption);
 
-        assertEquals("theArtOfWar.txt\n\nLINES: 7145\n", output);
+        assertEquals("theArtOfWar.txt 7145", output);
     }
 
     @Test
@@ -30,7 +30,7 @@ class CounterAppTest {
 
         String output = CounterApp.generateOutput(inputFileAndAllOptions);
 
-        assertEquals("theArtOfWar.txt\n\n\nBYTES: 342190\nLINES: 7145\nWORDS: 58164\nCHARS: 339292\n", output);
+        assertEquals("theArtOfWar.txt 342190 7145 58164 339292", output);
     }
 
     @Test
@@ -42,32 +42,33 @@ class CounterAppTest {
 
         String output = CounterApp.generateOutput(inputFileAndNoOption);
 
-        assertEquals("emptyTest.txt\n\n", output);
+        assertEquals("emptyTest.txt", output);
     }
 
     @Test
     void givenArgsContainingOptionsAndNoInputFileThenOutputContainsCorrectOptions() throws IOException {
-        setInput("abcd\nabcd");
+        setInput();
 
         CounterAppArgs noInputFileAndCharacterOption = new CounterAppArgs(false, false, false, true);
 
         String output = CounterApp.generateOutput(noInputFileAndCharacterOption);
 
-        assertEquals("CHARS: 9\n", output);
+        assertEquals("9", output);
     }
 
     @Test
     void givenArgsContainingNoOptionsAndNoInputFileThenOutputContainsAll() throws IOException {
-        setInput("abcd\nabcd");
+        setInput();
 
         CounterAppArgs noInputFileAndCharacterOption = new CounterAppArgs(true, true, true, true);
 
         String output = CounterApp.generateOutput(noInputFileAndCharacterOption);
 
-        assertEquals("\nBYTES: 9\nLINES: 2\nWORDS: 2\nCHARS: 9\n", output);
+        assertEquals("9 2 2 9", output);
     }
-    private void setInput(String input) {
-        ByteArrayInputStream in = new ByteArrayInputStream(input.getBytes());
+
+    private void setInput() {
+        ByteArrayInputStream in = new ByteArrayInputStream("abcd\nabcd".getBytes());
         System.setIn(in);
     }
 }

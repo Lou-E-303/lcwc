@@ -4,6 +4,7 @@ import constants.CounterAppArgs;
 
 import java.io.File;
 import java.util.Arrays;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class ArgumentParser {
 
@@ -17,18 +18,42 @@ public class ArgumentParser {
         File inputFile = new File(lastArg);
 
         var separatedArgs = Arrays.asList(args);
-        boolean bytes = separatedArgs.contains("-c");
-        boolean lines = separatedArgs.contains("-l");
-        boolean words = separatedArgs.contains("-w");
-        boolean chars = separatedArgs.contains("-m");
+
+        AtomicBoolean bytes = new AtomicBoolean(false);
+        AtomicBoolean lines = new AtomicBoolean(false);
+        AtomicBoolean words = new AtomicBoolean(false);
+        AtomicBoolean chars = new AtomicBoolean(false);
+
+        separatedArgs.stream()
+                .filter(arg -> arg.startsWith("-"))
+                .forEach(arg -> {
+                    switch (arg) {
+                        case "-c":
+                            bytes.set(true);
+                            break;
+                        case "-l":
+                            lines.set(true);
+                            break;
+                        case "-w":
+                            words.set(true);
+                            break;
+                        case "-m":
+                            chars.set(true);
+                            break;
+                        default:
+                            throw new IllegalArgumentException("Error: Unsupported argument '" + arg + "'. " +
+                                    "Expected one or more of: -c, -l, -w, -m, followed by a single input file.");
+                    }
+                });
+
 
         if (inputFile.exists()) {
             if (args.length == 1) {
                 return new CounterAppArgs(inputFile, true, true, true, true);
             }
-            return new CounterAppArgs(inputFile, bytes, lines, words, chars);
+            return new CounterAppArgs(inputFile, bytes.get(), lines.get(), words.get(), chars.get());
         } else {
-            return new CounterAppArgs(bytes, lines, words, chars);
+            return new CounterAppArgs(bytes.get(), lines.get(), words.get(), chars.get());
         }
     }
 }

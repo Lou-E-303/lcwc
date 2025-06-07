@@ -4,7 +4,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.internal.matchers.apachecommons.ReflectionEquals;
 import java.io.File;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 class ArgumentParserTest {
 
@@ -21,15 +21,14 @@ class ArgumentParserTest {
     }
 
     @Test
-    void givenInputFileAndUnsupportedInputArgsThenReturnCorrectArgs() {
+    void givenInputFileAndUnsupportedInputArgsThenThrowIllegalArgumentException() {
         String inputFileName = "src/test/resources/theArtOfWar.txt";
         String[] args = {"-z", "-y", "-x", inputFileName};
-        File inputFile = new File(inputFileName);
 
-        CounterAppArgs counterAppArgs = ArgumentParser.parse(args);
-        CounterAppArgs expectedArgs = new CounterAppArgs(inputFile, false, false, false, false);
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+                () -> ArgumentParser.parse(args));
 
-        assertTrue(new ReflectionEquals(expectedArgs).matches(counterAppArgs));
+        assertEquals("Error: Unsupported argument '-z'. Expected one or more of: -c, -l, -w, -m, followed by a single input file.", exception.getMessage());
     }
 
     @Test

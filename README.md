@@ -7,13 +7,9 @@ This is a `wc` 'clone' which reads from either a provided text file or standard 
 - Output the word count with the command line option `-w`.
 - Output the char count with the command line option `-m`.
 
-If no option is provided then it outputs them all.
+If no option is provided then it outputs them all. The output is prefixed with the filename and is thus ordered as follows:
 
-## Differences from `wc`:
-
-- The output is explicit about what each output line is e.g. `BYTES: 342190` etc.
-- The default option when no args except the input file are provided is to provide *all* information.
-- `lcwc` doesn't bother telling you when you've entered an illegal argument
+`[FILENAME] [BYTES] [LINES] [WORDS] [CHARS]`
 
 # Run
 
